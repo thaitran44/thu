@@ -1,0 +1,1332 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Gửi Anh Thư 🌸 Chúc Mừng 20/10</title>
+    <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@600;700&family=Quicksand:wght@500;600;700&family=Pacifico&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dreamy: #070a16;
+            --pink-deep: #e11d48;
+            --pink-rose: #f43f5e;
+            --pink-pastel: #fb7185;
+            --pink-soft: #fecdd3;
+            --pink-ice: #fff1f2;
+            --gold-star: #fde047;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body, html {
+            width: 100%;
+            height: 100%;
+            background-color: var(--bg-dreamy);
+            overflow: hidden;
+            font-family: 'Quicksand', sans-serif;
+            color: #fff;
+            user-select: none;
+            -webkit-user-select: none;
+            touch-action: none;
+        }
+
+        #canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            transform: translateZ(0);
+            -webkit-transform: translateZ(0);
+            will-change: transform;
+            touch-action: none;
+        }
+
+        .top-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: max(14px, env(safe-area-inset-top)) 20px 10px 20px;
+            z-index: 50;
+            pointer-events: auto;
+        }
+
+        .cute-btn {
+            background: rgba(255, 255, 255, 0.12);
+            border: 1.5px solid rgba(147, 197, 253, 0.6);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            color: #fff;
+            font-family: 'Comfortaa', cursive;
+            font-size: 0.82rem;
+            font-weight: 700;
+            padding: 8px 16px;
+            border-radius: 25px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
+            box-shadow: 0 4px 18px rgba(56, 189, 248, 0.35);
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .cute-btn:hover {
+            background: rgba(56, 189, 248, 0.32);
+            border-color: #bae6fd;
+            transform: translateY(-2px) scale(1.03);
+            box-shadow: 0 6px 22px rgba(56, 189, 248, 0.55);
+        }
+
+        .cute-btn:active { transform: translateY(1px); }
+
+        .cute-btn.playing {
+            border-color: #38bdf8;
+            background: rgba(56, 189, 248, 0.4);
+            box-shadow: 0 0 18px rgba(56, 189, 248, 0.7);
+        }
+
+        .ui-layer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 10;
+            pointer-events: none;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            padding: max(14px, env(safe-area-inset-top)) 16px max(18px, env(safe-area-inset-bottom)) 16px;
+            text-align: center;
+        }
+
+        .header-title {
+            margin-top: 42px;
+            opacity: 0;
+            transform: translateY(-16px);
+            transition: opacity 2s cubic-bezier(0.16, 1, 0.3, 1), transform 2s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .header-title.show { opacity: 1; transform: translateY(0); }
+
+        .sub-greeting {
+            font-family: 'Comfortaa', cursive;
+            font-size: 0.82rem;
+            letter-spacing: 3.5px;
+            color: #fde047;
+            font-weight: 700;
+            text-shadow: 0 0 12px rgba(253, 224, 71, 0.85);
+            margin-bottom: 2px;
+        }
+
+        .main-recipient {
+            font-family: 'Pacifico', cursive;
+            font-size: 2.85rem;
+            line-height: 1.45;
+            display: inline-block;
+            padding: 0.1em 0.35em 0.38em 0.35em;
+            overflow: visible;
+            background: linear-gradient(135deg, #ffffff 15%, #fecdd3 55%, #fb7185 90%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 18px rgba(244, 63, 94, 0.75));
+        }
+
+        .bottom-banner {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 2.2s cubic-bezier(0.16, 1, 0.3, 1), transform 2.2s cubic-bezier(0.16, 1, 0.3, 1);
+            pointer-events: auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 4px;
+        }
+
+        .bottom-banner.show { opacity: 1; transform: translateY(0); }
+
+        .wish-quote {
+            font-family: 'Quicksand', sans-serif;
+            font-weight: 600;
+            font-size: 0.95rem;
+            color: #f0f9ff;
+            text-shadow: 0 2px 14px rgba(0, 0, 0, 0.9), 0 0 16px rgba(56, 189, 248, 0.55);
+            max-width: 540px;
+            line-height: 1.5;
+            padding: 0 8px;
+        }
+
+        .letter-btn {
+            background: linear-gradient(135deg, #0284c7, #38bdf8, #60a5fa);
+            border: 2px solid #ffffff;
+            color: #ffffff;
+            font-family: 'Comfortaa', cursive;
+            font-size: 0.88rem;
+            font-weight: 700;
+            letter-spacing: 0.6px;
+            padding: 10px 25px;
+            border-radius: 30px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 6px 26px rgba(56, 189, 248, 0.55);
+            transition: all 0.3s ease;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .letter-btn:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 8px 30px rgba(56, 189, 248, 0.75);
+            background: linear-gradient(135deg, #0369a1, #0284c7, #38bdf8);
+        }
+
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(5, 8, 20, 0.85);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            z-index: 100;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 16px;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.4s ease;
+        }
+
+        .modal-overlay.active { opacity: 1; pointer-events: auto; }
+
+        .letter-card {
+            background: linear-gradient(145deg, rgba(32, 14, 28, 0.98), rgba(18, 8, 16, 0.98));
+            border: 2px solid rgba(254, 205, 211, 0.75);
+            border-radius: 24px;
+            max-width: 480px;
+            width: 100%;
+            max-height: 85vh;
+            overflow-y: auto;
+            padding: 32px 26px;
+            position: relative;
+            box-shadow: 0 15px 45px rgba(0, 0, 0, 0.85), 0 0 35px rgba(244, 63, 94, 0.35);
+            transform: scale(0.9) translateY(20px);
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            text-align: center;
+        }
+
+        .modal-overlay.active .letter-card { transform: scale(1) translateY(0); }
+
+        .close-btn {
+            position: absolute;
+            top: 12px;
+            right: 16px;
+            background: none;
+            border: none;
+            color: #fecdd3;
+            font-size: 1.6rem;
+            cursor: pointer;
+            transition: transform 0.25s ease, color 0.25s ease;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .close-btn:hover { color: #fff; transform: rotate(90deg) scale(1.15); }
+
+        .letter-title {
+            font-family: 'Pacifico', cursive;
+            line-height: 1.4;
+            display: inline-block;
+            padding: 0.08em 0.25em 0.32em 0.25em;
+            overflow: visible;
+            font-size: 2.15rem;
+            background: linear-gradient(135deg, #ffffff, #fecdd3, #fb7185);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 12px;
+        }
+
+        .letter-body {
+            font-family: 'Quicksand', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 500;
+            line-height: 1.8;
+            color: #f0f9ff;
+            text-align: justify;
+            margin-bottom: 20px;
+        }
+
+        .letter-body p { margin-bottom: 12px; }
+
+        .letter-signature {
+            font-family: 'Pacifico', cursive;
+            font-size: 1.6rem;
+            color: #bae6fd;
+            text-align: right;
+            margin-top: 6px;
+            text-shadow: 0 0 12px rgba(186, 230, 253, 0.6);
+        }
+
+        @media (max-width: 600px) {
+            .header-title { margin-top: 36px; }
+            .main-recipient { font-size: 2.35rem; line-height: 1.4; padding: 0.1em 0.25em 0.35em 0.25em; }
+            .sub-greeting { font-size: 0.72rem; letter-spacing: 2.5px; }
+            .wish-quote { font-size: 0.86rem; line-height: 1.45; }
+            .top-bar { padding: max(10px, env(safe-area-inset-top)) 14px 6px 14px; }
+            .cute-btn { font-size: 0.74rem; padding: 6px 13px; gap: 4px; }
+            .letter-btn { font-size: 0.82rem; padding: 9px 20px; }
+        }
+    </style>
+</head>
+<body>
+    <canvas id="canvas"></canvas>
+
+    <div class="top-bar">
+        <button id="btnMusic" class="cute-btn">
+            <span id="musicIcon">🎵</span> <span id="musicText">Bật Nhạc</span>
+        </button>
+        <button id="btnReplay" class="cute-btn">
+            <span>✨</span> <span>Nở Hoa Lại</span>
+        </button>
+    </div>
+
+    <div class="ui-layer">
+        <div id="headerTitle" class="header-title">
+            <div class="sub-greeting">CHÚC MỪNG NGÀY 20/10 🌸</div>
+            <div class="main-recipient">Gửi Anh Thư</div>
+        </div>
+
+        <div id="bottomBanner" class="bottom-banner">
+            <div class="wish-quote">
+                "Chúc An Thiên luôn tươi vui, dịu dàng và tỏa sáng rạng ngời như đóa hoa hồng xanh thiên thanh, mỗi ngày đều ngập tràn niềm vui và bình yên nhé! 🩵✨"
+            </div>
+            <button id="btnOpenLetter" class="letter-btn">
+                <span>💌</span> <span>Mở Bức Thư Nhỏ Nè</span>
+            </button>
+        </div>
+    </div>
+
+    <div id="modalLetter" class="modal-overlay">
+        <div class="letter-card">
+            <button id="btnCloseLetter" class="close-btn">&times;</button>
+            <div class="letter-title">Gửi Anh Thư yêu quý nè 🌸</div>
+            <div class="letter-body">
+                <p>Nhân ngày Phụ nữ Việt Nam 20/10, gửi tặng Anh Thư bó hoa hồng pastel phớt hồng dịu ngọt và đáng yêu nhất này nha!</p>
+                <p>Chúc Anh Thư luôn giữ trọn nụ cười rạng rỡ, hồn nhiên, học tập thật xuất sắc và mỗi ngày trôi qua đều ngập tràn niềm vui cùng những điều ngọt ngào.</p>
+                <p>Mong rằng tuổi thanh xuân của bạn sẽ luôn bình yên, tươi thắm và ngát hương như những đóa hồng mùa thu dịu dàng!</p>
+            </div>
+            <div class="letter-signature">Stay sweet, lovely & happy always 🌸✨</div>
+        </div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d', { alpha: false });
+
+        let width = 0, height = 0;
+        let dpr = 1;
+
+        const ANIMATION_DURATION = 10000;
+        let startTime = performance.now();
+        let animProgress = 0;
+        let isFullyBloomed = false;
+
+        let spriteStarGold = null;
+        let spriteStarBlue = null;
+        let spriteStarWhite = null;
+
+        function createCuteStarSprite(coreColor, glowColor, size) {
+            const sc = document.createElement('canvas');
+            sc.width = size;
+            sc.height = size;
+            const sctx = sc.getContext('2d');
+            const half = size / 2;
+
+            let grad = sctx.createRadialGradient(half, half, 0, half, half, half);
+            grad.addColorStop(0, glowColor);
+            grad.addColorStop(0.4, glowColor.replace('0.9', '0.3').replace('0.88', '0.25').replace('0.85', '0.25'));
+            grad.addColorStop(1, 'rgba(0,0,0,0)');
+            sctx.fillStyle = grad;
+            sctx.beginPath();
+            sctx.arc(half, half, half, 0, Math.PI * 2);
+            sctx.fill();
+
+            sctx.fillStyle = coreColor;
+            sctx.beginPath();
+            let points = 4;
+            let outerR = size * 0.42;
+            let innerR = size * 0.12;
+            for (let i = 0; i < points * 2; i++) {
+                let r = (i % 2 === 0) ? outerR : innerR;
+                let a = (i * Math.PI) / points;
+                let px = half + Math.cos(a) * r;
+                let py = half + Math.sin(a) * r;
+                if (i === 0) sctx.moveTo(px, py);
+                else sctx.lineTo(px, py);
+            }
+            sctx.closePath();
+            sctx.fill();
+
+            return sc;
+        }
+
+        function initSprites() {
+            spriteStarGold = createCuteStarSprite('#ffffff', 'rgba(255, 234, 121, 0.9)', 36);
+            spriteStarBlue = createCuteStarSprite('#ffffff', 'rgba(147, 197, 253, 0.88)', 36);
+            spriteStarWhite = createCuteStarSprite('#ffffff', 'rgba(255, 255, 255, 0.95)', 28);
+        }
+
+        function drawFastSprite(c, sprite, x, y, size, alpha) {
+            if (!sprite) return;
+            c.save();
+            c.globalAlpha = Math.max(0, Math.min(1, alpha));
+            c.drawImage(sprite, x - size / 2, y - size / 2, size, size);
+            c.restore();
+        }
+
+        let skyStars = [];
+        let shootingStars = [];
+        let lastShootingStarTime = 0;
+
+        function initSkyStars() {
+            skyStars = [];
+            for (let i = 0; i < 65; i++) {
+                skyStars.push({
+                    x: Math.random(),
+                    y: Math.random() * 0.72,
+                    size: 1.0 + Math.random() * 2.2,
+                    twinkleSpeed: 1.2 + Math.random() * 3.2,
+                    twinklePhase: Math.random() * Math.PI * 2,
+                    isBlue: Math.random() < 0.5
+                });
+            }
+        }
+
+        function spawnShootingStar(time) {
+            shootingStars.push({
+                x: width * (0.2 + Math.random() * 0.7),
+                y: height * (0.05 + Math.random() * 0.25),
+                len: 75 + Math.random() * 115,
+                speed: 480 + Math.random() * 320,
+                angle: Math.PI / 4 + (Math.random() - 0.5) * 0.2,
+                opacity: 1.0,
+                startTime: time
+            });
+        }
+
+        // ==========================================
+        // MẶT TRĂNG LƯỠI LIỀM NGHỆ THUẬT NHỎ GỌN & TINH TẾ
+        // ==========================================
+        // ==========================================
+        // MẶT TRĂNG LƯỠI LIỀM NGHỆ THUẬT NHỎ GỌN & THANH TÚ
+        // ==========================================
+        // ==========================================
+        // MẶT TRĂNG LƯỠI LIỀM NGHỆ THUẬT NHỎ GỌN & THANH TÚ
+        // ==========================================
+        // ==========================================
+        // MẶT TRĂNG LƯỠI LIỀM NGHỆ THUẬT NHỎ GỌN & THANH TÚ
+        // ==========================================
+        function drawArtisticMoon(c, time) {
+            let moonX = width * 0.84;
+            let moonY = Math.max(42, height * 0.11);
+            let moonR = Math.max(9, Math.min(13, Math.min(width, height) * 0.02));
+
+            c.save();
+
+            // 1. Quầng sáng êm dịu, không gắt
+            let moonAura = c.createRadialGradient(moonX, moonY, moonR * 0.2, moonX, moonY, moonR * 3.0);
+            moonAura.addColorStop(0, 'rgba(255, 250, 225, 0.35)');
+            moonAura.addColorStop(0.4, 'rgba(254, 240, 138, 0.10)');
+            moonAura.addColorStop(1, 'rgba(0, 0, 0, 0)');
+            c.fillStyle = moonAura;
+            c.beginPath();
+            c.arc(moonX, moonY, moonR * 3.0, 0, Math.PI * 2);
+            c.fill();
+
+            // 2. Trăng khuyết mềm mại thanh tú (1 đường cong Bezier duy nhất, không dùng hình tròn đen)
+            c.translate(moonX, moonY);
+            c.rotate(-0.28);
+
+            c.beginPath();
+            c.arc(0, 0, moonR, -Math.PI * 0.46, Math.PI * 0.46, false);
+            let tipCos = Math.cos(-Math.PI * 0.46) * moonR;
+            let tipSin = Math.sin(-Math.PI * 0.46) * moonR;
+            c.bezierCurveTo(moonR * 0.32, moonR * 0.46, moonR * 0.32, -moonR * 0.46, tipCos, tipSin);
+            c.closePath();
+
+            let moonGrad = c.createLinearGradient(-moonR * 0.4, -moonR, moonR, moonR);
+            moonGrad.addColorStop(0, '#ffffff');
+            moonGrad.addColorStop(0.5, '#fffdf0');
+            moonGrad.addColorStop(1, '#fde68a');
+            c.fillStyle = moonGrad;
+            c.shadowColor = 'rgba(254, 240, 138, 0.75)';
+            c.shadowBlur = 8;
+            c.fill();
+
+            // 3. Ngôi sao nhỏ xíu lấp lánh cạnh mũi trăng (nhỏ nhắn tinh xảo, r = 1.2px)
+            let starTwinkle = 0.5 + 0.5 * Math.sin((time || 0) * 2.8);
+            c.fillStyle = 'rgba(255, 255, 255, ' + (0.65 + 0.35 * starTwinkle) + ')';
+            c.shadowColor = '#ffffff';
+            c.shadowBlur = 4;
+            c.beginPath();
+            c.arc(moonR * 1.35, -moonR * 0.32, 1.2, 0, Math.PI * 2);
+            c.fill();
+
+            c.restore();
+        }
+
+        function updateAndDrawSky(c, time) {
+            c.save();
+
+            let nebulaGrad1 = c.createRadialGradient(width * 0.25, height * 0.2, 10, width * 0.25, height * 0.2, width * 0.55);
+            nebulaGrad1.addColorStop(0, 'rgba(244, 63, 94, 0.14)');
+            nebulaGrad1.addColorStop(1, 'rgba(0,0,0,0)');
+            c.fillStyle = nebulaGrad1;
+            c.fillRect(0, 0, width, height);
+
+            let nebulaGrad2 = c.createRadialGradient(width * 0.75, height * 0.35, 10, width * 0.75, height * 0.35, width * 0.6);
+            nebulaGrad2.addColorStop(0, 'rgba(254, 205, 211, 0.15)');
+            nebulaGrad2.addColorStop(1, 'rgba(0,0,0,0)');
+            c.fillStyle = nebulaGrad2;
+            c.fillRect(0, 0, width, height);
+
+            drawArtisticMoon(c, time);
+
+            for (let i = 0; i < skyStars.length; i++) {
+                let s = skyStars[i];
+                let twinkle = 0.35 + 0.65 * (0.5 + 0.5 * Math.sin(time * s.twinkleSpeed + s.twinklePhase));
+                let sprite = s.isBlue ? spriteStarBlue : spriteStarGold;
+                c.fillStyle = s.color || '#bae6fd';
+                c.globalAlpha = twinkle * 0.85;
+                c.shadowColor = s.color || '#fff';
+                c.shadowBlur = 3;
+                c.beginPath();
+                c.arc(s.x * width, s.y * height, Math.max(0.7, s.size * 0.65), 0, Math.PI * 2);
+                c.fill();
+            }
+
+            if (time - lastShootingStarTime > 3.8 + Math.random() * 3.5) {
+                spawnShootingStar(time);
+                lastShootingStarTime = time;
+            }
+
+            for (let i = shootingStars.length - 1; i >= 0; i--) {
+                let ss = shootingStars[i];
+                let age = time - ss.startTime;
+                if (age > 0.85) {
+                    shootingStars.splice(i, 1);
+                    continue;
+                }
+                let curX = ss.x + Math.cos(ss.angle) * ss.speed * age;
+                let curY = ss.y + Math.sin(ss.angle) * ss.speed * age;
+                let tailX = curX - Math.cos(ss.angle) * ss.len;
+                let tailY = curY - Math.sin(ss.angle) * ss.len;
+                let alpha = (1 - age / 0.85);
+
+                let shootGrad = c.createLinearGradient(tailX, tailY, curX, curY);
+                shootGrad.addColorStop(0, 'rgba(255,255,255,0)');
+                shootGrad.addColorStop(1, 'rgba(255, 255, 255, ' + alpha + ')');
+
+                c.strokeStyle = shootGrad;
+                c.lineWidth = 2.0;
+                c.beginPath();
+                c.moveTo(tailX, tailY);
+                c.lineTo(curX, curY);
+                c.stroke();
+            }
+
+            c.restore();
+        }
+
+        // ==========================================
+        // ĐỐM SÁNG ĐOM ĐÓM THẦN TIÊN BAY LÊN (NỀN SAU)
+        // ==========================================
+        // ==========================================
+        // ĐÓM SÁNG HUYỀN ẢO RÕ NÉT & LUNG LINH (LUMINOUS RISING MOTES)
+        // Hạt tròn sáng rõ, phát quang dịu dàng, bay lên uyển chuyển
+        // ==========================================
+        let risingMotes = [];
+        function initRisingMotes() {
+            risingMotes = [];
+            for (let i = 0; i < 65; i++) {
+                risingMotes.push({
+                    x: (Math.random() - 0.5) * 450,
+                    y: -250 + Math.random() * 540,
+                    r: 1.2 + Math.random() * 1.6, // Bán kính 1.2 - 2.8px sáng rõ
+                    vy: -0.32 - Math.random() * 0.45,
+                    swaySpeed: 1.0 + Math.random() * 1.8,
+                    swayAmp: 8 + Math.random() * 14,
+                    phase: Math.random() * Math.PI * 2,
+                    baseAlpha: 0.55 + Math.random() * 0.40, // Độ sáng cao hơn, rõ nét
+                    twinkleSpeed: 1.6 + Math.random() * 2.2,
+                    type: Math.random()
+                });
+            }
+        }
+
+        function updateAndDrawRisingMotes(c, cx, cy, scale, time) {
+            c.save();
+            let t = time || 0;
+            for (let i = 0; i < risingMotes.length; i++) {
+                let m = risingMotes[i];
+                m.y += m.vy;
+                if (m.y < -310) {
+                    m.y = 220 + Math.random() * 50;
+                    m.x = (Math.random() - 0.5) * 450;
+                }
+
+                let swayX = Math.sin(t * m.swaySpeed + m.phase) * m.swayAmp;
+                let px = cx + (m.x + swayX) * scale;
+                let py = cy + (m.y - 15) * scale;
+
+                let pulse = 0.65 + 0.35 * Math.sin(t * m.twinkleSpeed + m.phase);
+                let alpha = Math.min(1.0, m.baseAlpha * pulse);
+                if (alpha <= 0.05) continue;
+
+                let col = m.type < 0.45 ? '#fb7185' : (m.type < 0.78 ? '#fecdd3' : '#ffffff');
+
+                // Quầng sáng phát quang rõ nét
+                c.fillStyle = col;
+                c.globalAlpha = alpha;
+                c.shadowColor = col;
+                c.shadowBlur = 8 * scale;
+                c.beginPath();
+                c.arc(px, py, m.r * scale, 0, Math.PI * 2);
+                c.fill();
+
+                // Lõi sáng trắng nhỏ bên trong tạo chiều sâu lung linh
+                if (m.r > 1.8) {
+                    c.fillStyle = '#ffffff';
+                    c.globalAlpha = alpha * 0.85;
+                    c.shadowBlur = 2;
+                    c.beginPath();
+                    c.arc(px, py, m.r * 0.45 * scale, 0, Math.PI * 2);
+                    c.fill();
+                }
+
+                // Tia sao vi mô lấp lánh nhẹ nhàng cho ~30% hạt khi đạt độ sáng đỉnh
+                if (m.type > 0.68 && pulse > 0.75) {
+                    c.strokeStyle = 'rgba(255, 255, 255, ' + (alpha * 0.9) + ')';
+                    c.lineWidth = 0.8 * scale;
+                    let len = m.r * 2.2 * scale;
+                    c.beginPath();
+                    c.moveTo(px - len, py); c.lineTo(px + len, py);
+                    c.moveTo(px, py - len); c.lineTo(px, py + len);
+                    c.stroke();
+                }
+            }
+            c.restore();
+        }
+
+        // ==========================================
+        function generateRosePetals(seed) {
+            const petals = [];
+            const GOLDEN_ANGLE = 137.508 * (Math.PI / 180);
+            const totalPetals = 26; // 26 cánh vỏ sò uốn cong chuẩn nét
+
+            for (let i = 0; i < totalPetals; i++) {
+                let t = i / (totalPetals - 1); // 0 (tâm) -> 1 (ngoài)
+                let angle = i * GOLDEN_ANGLE + Math.sin(seed + i * 0.4) * 0.15;
+                
+                let rIn = 5 + Math.pow(t, 0.75) * 36;
+                let rOut = rIn + (9 + Math.pow(t, 0.8) * 16);
+                let arcSpan = (65 + (1 - t) * 45) * (Math.PI / 180);
+                let delay = 0.15 + t * 0.65;
+
+                petals.push({
+                    index: i, layer: t, angle, rIn, rOut, arcSpan, delay
+                });
+            }
+
+            // SẮP XẾP VẼ TỪ NGOÀI VÀO TRONG ĐỂ TÂM HOA NẰM TRÊN CÙNG RÕ RÀNG!
+            petals.sort((a, b) => b.layer - a.layer);
+            return petals;
+        }
+
+        function drawCuppedPetal(c, rx, ry, p, easeProg, scale) {
+            if (easeProg <= 0.05) return;
+
+            let ang = p.angle;
+            let span = p.arcSpan * 0.5;
+            let rIn = p.rIn * easeProg * scale;
+            let rOut = p.rOut * easeProg * scale;
+
+            let a1 = ang - span;
+            let a2 = ang + span;
+
+            let pTipX = rx + Math.cos(ang) * rOut;
+            let pTipY = ry + Math.sin(ang) * rOut;
+
+            let pIn2X = rx + Math.cos(a2 * 0.95) * rIn;
+            let pIn2Y = ry + Math.sin(a2 * 0.95) * rIn;
+
+            let pInMidX = rx + Math.cos(ang) * (rIn * 0.7);
+            let pInMidY = ry + Math.sin(ang) * (rIn * 0.7);
+
+            let pIn1X = rx + Math.cos(a1 * 0.95) * rIn;
+            let pIn1Y = ry + Math.sin(a1 * 0.95) * rIn;
+
+            c.save();
+            c.beginPath();
+            c.moveTo(pIn1X, pIn1Y);
+            c.bezierCurveTo(
+                rx + Math.cos(a1) * (rIn * 1.1), ry + Math.sin(a1) * (rIn * 1.1),
+                rx + Math.cos(ang - span * 0.4) * (rOut * 0.95), ry + Math.sin(ang - span * 0.4) * (rOut * 0.95),
+                pTipX, pTipY
+            );
+            c.bezierCurveTo(
+                rx + Math.cos(ang + span * 0.4) * (rOut * 0.95), ry + Math.sin(ang + span * 0.4) * (rOut * 0.95),
+                rx + Math.cos(a2) * (rIn * 1.1), ry + Math.sin(a2) * (rIn * 1.1),
+                pIn2X, pIn2Y
+            );
+            c.bezierCurveTo(
+                pInMidX + (pIn2X - pInMidX) * 0.5, pInMidY + (pIn2Y - pInMidY) * 0.5,
+                pInMidX + (pIn1X - pInMidX) * 0.5, pInMidY + (pIn1Y - pInMidY) * 0.5,
+                pIn1X, pIn1Y
+            );
+            c.closePath();
+
+            let grad = c.createRadialGradient(rx, ry, rIn * 0.5, rx, ry, rOut);
+            let layer = p.layer;
+
+            if (layer < 0.3) {
+                grad.addColorStop(0, '#be185d');
+                grad.addColorStop(0.5, '#e11d48');
+                grad.addColorStop(0.85, '#fb7185');
+                grad.addColorStop(1, '#fecdd3');
+            } else if (layer < 0.7) {
+                grad.addColorStop(0, '#e11d48');
+                grad.addColorStop(0.4, '#fb7185');
+                grad.addColorStop(0.8, '#fecdd3');
+                grad.addColorStop(1, '#fff1f2');
+            } else {
+                grad.addColorStop(0, '#fb7185');
+                grad.addColorStop(0.45, '#fecdd3');
+                grad.addColorStop(0.85, '#fff1f2');
+                grad.addColorStop(1, '#ffffff');
+            }
+
+            c.fillStyle = grad;
+            c.shadowColor = 'rgba(50, 10, 25, 0.25)';
+            c.shadowBlur = 4 * scale;
+            c.shadowOffsetX = 0;
+            c.shadowOffsetY = 2 * scale;
+            c.fill();
+
+            c.strokeStyle = 'rgba(255, 255, 255, 0.75)';
+            c.lineWidth = 0.9 * scale;
+            c.stroke();
+
+            c.restore();
+        }
+
+        // Tâm nụ hoa hồng xoắn ốc rõ nét
+        function drawRoseHeart(c, rx, ry, easeProg, scale) {
+            let s = easeProg * scale;
+            c.save();
+            c.translate(rx, ry);
+
+            let coreGrad = c.createRadialGradient(0, 0, 0, 0, 0, 9 * s);
+            coreGrad.addColorStop(0, '#831843');
+            coreGrad.addColorStop(0.6, '#be185d');
+            coreGrad.addColorStop(1, '#f43f5e');
+            c.fillStyle = coreGrad;
+            c.beginPath();
+            c.arc(0, 0, 8 * s, 0, Math.PI * 2);
+            c.fill();
+
+            c.strokeStyle = 'rgba(255, 255, 255, 0.9)';
+            c.lineWidth = 1.3 * s;
+            c.beginPath();
+            c.arc(0, 0, 5.5 * s, 0.3, Math.PI * 1.5);
+            c.stroke();
+
+            c.beginPath();
+            c.arc(1.2 * s, -1 * s, 3.6 * s, Math.PI * 0.9, Math.PI * 2.2);
+            c.stroke();
+
+            c.beginPath();
+            c.arc(-0.8 * s, 0.8 * s, 2.0 * s, Math.PI * 0.2, Math.PI * 1.3);
+            c.stroke();
+
+            c.restore();
+        }
+
+        const KOREAN_ROSES = [
+            { relX: 0, relY: -10, scale: 1.18, delay: 0.22, seed: 1.1 },
+            { relX: 0, relY: -74, scale: 1.0, delay: 0.28, seed: 2.3 },
+            { relX: -56, relY: -48, scale: 0.98, delay: 0.25, seed: 3.5 },
+            { relX: 56, relY: -48, scale: 0.98, delay: 0.26, seed: 4.7 },
+            { relX: -52, relY: 15, scale: 0.96, delay: 0.30, seed: 5.2 },
+            { relX: 52, relY: 15, scale: 0.96, delay: 0.31, seed: 6.4 },
+            { relX: 0, relY: 52, scale: 1.08, delay: 0.36, seed: 7.1 }
+        ];
+
+        KOREAN_ROSES.forEach(rose => {
+            rose.petalList = generateRosePetals(rose.seed);
+        });
+
+        function drawLushRose(c, rx, ry, roseData, globalProg) {
+            let localProg = Math.max(0, Math.min(1, (globalProg - roseData.delay) / (1 - roseData.delay)));
+            if (localProg <= 0.01) return;
+
+            let easeProg = localProg < 0.5 ? 4 * localProg * localProg * localProg : 1 - Math.pow(-2 * localProg + 2, 3) / 2;
+
+            c.save();
+
+            // Vầng hào quang xanh pastel dịu nhẹ phía sau hoa (không che mặt hoa)
+            if (easeProg > 0.3) {
+                let auraAlpha = (easeProg - 0.3) * 0.35;
+                c.fillStyle = 'rgba(251, 113, 133, ' + auraAlpha + ')';
+                c.beginPath();
+                c.arc(rx, ry, 60 * roseData.scale * easeProg, 0, Math.PI * 2);
+                c.fill();
+            }
+
+            // Vẽ lần lượt các lớp cánh từ ngoài vào trong
+            let petals = roseData.petalList;
+            for (let i = 0; i < petals.length; i++) {
+                let p = petals[i];
+                if (easeProg > p.delay) {
+                    let pProg = Math.min(1.0, (easeProg - p.delay) / 0.25);
+                    drawCuppedPetal(c, rx, ry, p, pProg, roseData.scale);
+                }
+            }
+
+            // Tâm nụ hoa hồng sắc nét
+            if (easeProg > 0.35) {
+                drawRoseHeart(c, rx, ry, easeProg, roseData.scale);
+            }
+
+            c.restore();
+        }
+
+        // ==========================================
+        // HOA BABY TRẮNG TUYẾT DỊU DÀNG (KHÔNG DÙNG NGÔI SAO CHE HOA)
+        // ==========================================
+        let babyFlowers = [];
+        function initBabyFlowers() {
+            babyFlowers = [];
+            for (let i = 0; i < 150; i++) {
+                let ang = Math.random() * Math.PI * 2;
+                let dist = 38 + Math.random() * 88;
+                babyFlowers.push({
+                    relX: Math.cos(ang) * dist * 1.15,
+                    relY: Math.sin(ang) * dist * 0.95 - 10,
+                    size: 1.6 + Math.random() * 2.2,
+                    delay: 0.32 + Math.random() * 0.4,
+                    twinkleSpeed: 2 + Math.random() * 3,
+                    phase: Math.random() * Math.PI * 2
+                });
+            }
+        }
+
+        function drawBabyBreathCloud(c, cx, cy, scale, globalProg, time) {
+            c.save();
+            for (let i = 0; i < babyFlowers.length; i++) {
+                let bf = babyFlowers[i];
+                if (globalProg < bf.delay) continue;
+
+                let p = Math.min(1, (globalProg - bf.delay) / 0.2);
+                let x = cx + bf.relX * scale;
+                let y = cy + bf.relY * scale;
+
+                let twinkle = 0.5 + 0.5 * Math.sin(time * bf.twinkleSpeed + bf.phase);
+                let alpha = p * (0.65 + 0.35 * twinkle);
+
+                c.strokeStyle = 'rgba(140, 195, 165, 0.35)';
+                c.lineWidth = 0.8 * scale;
+                c.beginPath();
+                c.moveTo(x, y);
+                c.lineTo(x - bf.relX * 0.12 * scale, y - bf.relY * 0.12 * scale + 10 * scale);
+                c.stroke();
+
+                c.fillStyle = 'rgba(255, 255, 255, ' + alpha * 0.9 + ')';
+                c.shadowColor = '#ffffff';
+                c.shadowBlur = 3;
+                c.beginPath();
+                c.arc(x, y, bf.size * scale * 0.65, 0, Math.PI * 2);
+                c.fill();
+            }
+            c.restore();
+        }
+
+        const CUTE_LEAVES = [
+            { x: -90, y: -70, angle: -0.75, size: 48, delay: 0.22 },
+            { x: 90, y: -70, angle: 0.75, size: 48, delay: 0.23 },
+            { x: -110, y: -15, angle: -1.35, size: 44, delay: 0.25 },
+            { x: 110, y: -15, angle: 1.35, size: 44, delay: 0.26 },
+            { x: -95, y: 50, angle: -2.05, size: 42, delay: 0.28 },
+            { x: 95, y: 50, angle: 2.05, size: 42, delay: 0.29 },
+            { x: -40, y: 88, angle: -2.5, size: 36, delay: 0.31 },
+            { x: 40, y: 88, angle: 2.5, size: 36, delay: 0.32 }
+        ];
+
+        function drawCuteLeaves(c, cx, cy, scale, globalProg) {
+            c.save();
+            for (let i = 0; i < CUTE_LEAVES.length; i++) {
+                let leaf = CUTE_LEAVES[i];
+                if (globalProg < leaf.delay) continue;
+                let p = Math.min(1, (globalProg - leaf.delay) / 0.25);
+
+                let lx = cx + leaf.x * scale;
+                let ly = cy + leaf.y * scale;
+
+                c.save();
+                c.translate(lx, ly);
+                c.rotate(leaf.angle);
+                c.scale(p * scale, p * scale);
+
+                let lw = leaf.size;
+                let lh = leaf.size * 0.65;
+
+                c.beginPath();
+                c.moveTo(0, 0);
+                c.bezierCurveTo(lw * 0.4, -lh, lw * 0.8, -lh * 0.8, lw * 1.35, 0);
+                c.bezierCurveTo(lw * 0.8, lh * 0.8, lw * 0.4, lh, 0, 0);
+                c.closePath();
+
+                let grad = c.createLinearGradient(0, -lh, lw * 1.35, lh);
+                grad.addColorStop(0, '#1a3a2a');
+                grad.addColorStop(0.5, '#3b6e50');
+                grad.addColorStop(1, '#74b690');
+                c.fillStyle = grad;
+                c.fill();
+
+                c.strokeStyle = 'rgba(255, 255, 255, 0.45)';
+                c.lineWidth = 0.8;
+                c.beginPath();
+                c.moveTo(0, 0);
+                c.lineTo(lw * 1.3, 0);
+                c.stroke();
+
+                c.restore();
+            }
+            c.restore();
+        }
+
+        // ==========================================
+        // GIẤY BỌC VOAN HÀN QUỐC TÔN HOA RỰC SÁNG
+        // ==========================================
+        function drawCuteBackWrapper(c, cx, cy, scale, prog) {
+            if (prog <= 0.02) return;
+            c.save();
+            c.globalAlpha = Math.min(prog * 1.2, 1.0);
+
+            let waistY = cy + 120 * scale;
+
+            c.beginPath();
+            c.moveTo(cx - 28 * scale, waistY);
+            c.bezierCurveTo(cx - 90 * scale, cy + 20 * scale, cx - 180 * scale * prog, cy - 10 * scale, cx - 175 * scale * prog, cy - 110 * scale * prog);
+            c.bezierCurveTo(cx - 160 * scale * prog, cy - 170 * scale * prog, cx - 85 * scale * prog, cy - 182 * scale * prog, cx, cy - 186 * scale * prog);
+            c.bezierCurveTo(cx + 85 * scale * prog, cy - 182 * scale * prog, cx + 160 * scale * prog, cy - 170 * scale * prog, cx + 175 * scale * prog, cy - 110 * scale * prog);
+            c.bezierCurveTo(cx + 180 * scale * prog, cy - 10 * scale, cx + 90 * scale, cy + 20 * scale, cx + 28 * scale, waistY);
+            c.closePath();
+
+            let gradBack = c.createLinearGradient(cx, cy - 186 * scale, cx, waistY);
+            gradBack.addColorStop(0, 'rgba(45, 18, 38, 0.90)');
+            gradBack.addColorStop(0.5, 'rgba(28, 10, 24, 0.94)');
+            gradBack.addColorStop(1, 'rgba(15, 5, 14, 0.98)');
+            c.fillStyle = gradBack;
+            c.fill();
+
+            c.strokeStyle = 'rgba(254, 205, 211, 0.75)';
+            c.lineWidth = 1.4 * scale;
+            c.stroke();
+
+            c.restore();
+        }
+
+        function drawCuteFrontWrapperAndRibbon(c, cx, cy, scale, prog, time) {
+            if (prog <= 0.15) return;
+            c.save();
+
+            let p = Math.min(1, (prog - 0.15) / 0.85);
+            let waistY = cy + 115 * scale;
+            let stemEndY = cy + 225 * scale;
+
+            c.save();
+            c.lineWidth = 2.4 * scale;
+            for (let i = -3; i <= 3; i++) {
+                let sx = cx + i * 5.0 * scale;
+                c.strokeStyle = i % 2 === 0 ? '#1e4832' : '#326d4c';
+                c.beginPath();
+                c.moveTo(sx, waistY);
+                c.lineTo(sx + i * 1.8 * scale, stemEndY - Math.abs(i) * 3 * scale);
+                c.stroke();
+
+                c.fillStyle = '#a7f3d0';
+                c.beginPath();
+                c.ellipse(sx + i * 1.8 * scale, stemEndY - Math.abs(i) * 3 * scale, 1.8 * scale, 0.9 * scale, 0.4, 0, Math.PI * 2);
+                c.fill();
+            }
+            c.restore();
+
+            c.beginPath();
+            c.moveTo(cx - 135 * scale * p, cy + 42 * scale);
+            c.bezierCurveTo(cx - 95 * scale, cy + 85 * scale, cx - 40 * scale, waistY, cx, waistY + 14 * scale);
+            c.bezierCurveTo(cx - 18 * scale, waistY + 50 * scale, cx - 28 * scale, stemEndY - 35 * scale, cx - 14 * scale, stemEndY - 15 * scale);
+            c.lineTo(cx - 32 * scale, waistY + 70 * scale);
+            c.bezierCurveTo(cx - 82 * scale, waistY + 26 * scale, cx - 150 * scale * p, cy + 80 * scale, cx - 135 * scale * p, cy + 42 * scale);
+            c.closePath();
+
+            let gradLapelL = c.createLinearGradient(cx - 135 * scale, cy + 42 * scale, cx, waistY + 70 * scale);
+            gradLapelL.addColorStop(0, 'rgba(55, 20, 45, 0.92)');
+            gradLapelL.addColorStop(0.5, 'rgba(35, 12, 30, 0.95)');
+            gradLapelL.addColorStop(1, 'rgba(18, 6, 16, 0.98)');
+            c.fillStyle = gradLapelL;
+            c.fill();
+            c.strokeStyle = 'rgba(254, 205, 211, 0.8)';
+            c.lineWidth = 1.2 * scale;
+            c.stroke();
+
+            c.beginPath();
+            c.moveTo(cx + 135 * scale * p, cy + 42 * scale);
+            c.bezierCurveTo(cx + 95 * scale, cy + 85 * scale, cx + 40 * scale, waistY, cx - 20 * scale, waistY + 10 * scale);
+            c.bezierCurveTo(cx + 14 * scale, waistY + 50 * scale, cx + 25 * scale, stemEndY - 35 * scale, cx + 14 * scale, stemEndY - 15 * scale);
+            c.lineTo(cx + 32 * scale, waistY + 70 * scale);
+            c.bezierCurveTo(cx + 82 * scale, waistY + 26 * scale, cx + 150 * scale * p, cy + 80 * scale, cx + 135 * scale * p, cy + 42 * scale);
+            c.closePath();
+
+            let gradLapelR = c.createLinearGradient(cx + 135 * scale, cy + 42 * scale, cx, waistY + 70 * scale);
+            gradLapelR.addColorStop(0, 'rgba(32, 55, 102, 0.92)');
+            gradLapelR.addColorStop(0.5, 'rgba(20, 36, 72, 0.95)');
+            gradLapelR.addColorStop(1, 'rgba(10, 22, 46, 0.98)');
+            c.fillStyle = gradLapelR;
+            c.fill();
+            c.strokeStyle = 'rgba(186, 230, 253, 0.75)';
+            c.lineWidth = 1.2 * scale;
+            c.stroke();
+
+            let knotY = waistY + 5 * scale;
+            let sway = Math.sin(time * 2.0) * 4 * scale;
+
+            c.beginPath();
+            c.moveTo(cx - 8 * scale, knotY + 8 * scale);
+            c.bezierCurveTo(cx - 32 * scale, knotY + 45 * scale, cx - 60 * scale + sway, knotY + 105 * scale, cx - 38 * scale + sway, knotY + 155 * scale);
+            c.lineTo(cx - 24 * scale + sway, knotY + 140 * scale);
+            c.lineTo(cx - 18 * scale + sway, knotY + 152 * scale);
+            c.bezierCurveTo(cx - 40 * scale + sway, knotY + 100 * scale, cx - 16 * scale, knotY + 45 * scale, cx - 2 * scale, knotY + 8 * scale);
+            c.closePath();
+            let gradTailL = c.createLinearGradient(cx - 8 * scale, knotY, cx - 35 * scale, knotY + 150 * scale);
+            gradTailL.addColorStop(0, 'rgba(255, 255, 255, 0.96)');
+            gradTailL.addColorStop(0.6, 'rgba(255, 228, 230, 0.92)');
+            gradTailL.addColorStop(1, 'rgba(254, 205, 211, 0.80)');
+            c.fillStyle = gradTailL;
+            c.fill();
+
+            c.beginPath();
+            c.moveTo(cx + 8 * scale, knotY + 8 * scale);
+            c.bezierCurveTo(cx + 32 * scale, knotY + 45 * scale, cx + 60 * scale - sway, knotY + 105 * scale, cx + 38 * scale - sway, knotY + 155 * scale);
+            c.lineTo(cx + 24 * scale - sway, knotY + 140 * scale);
+            c.lineTo(cx + 18 * scale - sway, knotY + 152 * scale);
+            c.bezierCurveTo(cx + 40 * scale - sway, knotY + 100 * scale, cx + 16 * scale, knotY + 45 * scale, cx + 2 * scale, knotY + 8 * scale);
+            c.closePath();
+            let gradTailR = c.createLinearGradient(cx + 8 * scale, knotY, cx + 35 * scale, knotY + 150 * scale);
+            gradTailR.addColorStop(0, 'rgba(255, 255, 255, 0.96)');
+            gradTailR.addColorStop(0.6, 'rgba(255, 228, 230, 0.92)');
+            gradTailR.addColorStop(1, 'rgba(254, 205, 211, 0.80)');
+            c.fillStyle = gradTailR;
+            c.fill();
+
+            c.beginPath();
+            c.moveTo(cx, knotY);
+            c.bezierCurveTo(cx - 36 * scale, knotY - 44 * scale, cx - 85 * scale, knotY - 26 * scale, cx - 76 * scale, knotY + 8 * scale);
+            c.bezierCurveTo(cx - 70 * scale, knotY + 38 * scale, cx - 24 * scale, knotY + 24 * scale, cx, knotY + 4 * scale);
+            c.closePath();
+            let gradLoopL = c.createLinearGradient(cx, knotY, cx - 78 * scale, knotY);
+            gradLoopL.addColorStop(0, 'rgba(255, 255, 255, 0.98)');
+            gradLoopL.addColorStop(0.6, 'rgba(186, 230, 253, 0.88)');
+            gradLoopL.addColorStop(1, 'rgba(96, 165, 250, 0.78)');
+            c.fillStyle = gradLoopL;
+            c.fill();
+            c.strokeStyle = '#ffffff';
+            c.lineWidth = 1.1 * scale;
+            c.stroke();
+
+            c.beginPath();
+            c.moveTo(cx, knotY);
+            c.bezierCurveTo(cx + 36 * scale, knotY - 44 * scale, cx + 85 * scale, knotY - 26 * scale, cx + 76 * scale, knotY + 8 * scale);
+            c.bezierCurveTo(cx + 70 * scale, knotY + 38 * scale, cx + 24 * scale, knotY + 24 * scale, cx, knotY + 4 * scale);
+            c.closePath();
+            let gradLoopR = c.createLinearGradient(cx, knotY, cx + 78 * scale, knotY);
+            gradLoopR.addColorStop(0, 'rgba(255, 255, 255, 0.98)');
+            gradLoopR.addColorStop(0.6, 'rgba(186, 230, 253, 0.88)');
+            gradLoopR.addColorStop(1, 'rgba(96, 165, 250, 0.78)');
+            c.fillStyle = gradLoopR;
+            c.fill();
+            c.strokeStyle = '#ffffff';
+            c.lineWidth = 1.1 * scale;
+            c.stroke();
+
+            c.beginPath();
+            c.ellipse(cx, knotY, 10 * scale, 8.5 * scale, 0, 0, Math.PI * 2);
+            let gradKnot = c.createRadialGradient(cx, knotY - 2 * scale, 1, cx, knotY, 10 * scale);
+            gradKnot.addColorStop(0, '#ffffff');
+            gradKnot.addColorStop(0.6, '#bae6fd');
+            gradKnot.addColorStop(1, '#38bdf8');
+            c.fillStyle = gradKnot;
+            c.fill();
+            c.strokeStyle = '#ffffff';
+            c.lineWidth = 1.2 * scale;
+            c.stroke();
+
+            drawFastSprite(c, spriteStarWhite, cx, knotY, 26 * scale, 0.9);
+
+            c.restore();
+        }
+
+        let fireworks = [];
+        function createHeartFirework(x, y) {
+            let count = 28;
+            for (let i = 0; i < count; i++) {
+                let t = (Math.PI * 2 * i) / count;
+                let hx = 16 * Math.pow(Math.sin(t), 3);
+                let hy = -(13 * Math.cos(t) - 5 * Math.cos(2 * t) - 2 * Math.cos(3 * t) - Math.cos(4 * t));
+
+                let speed = 2.4 + Math.random() * 1.6;
+                fireworks.push({
+                    x, y,
+                    vx: (hx / 16) * speed,
+                    vy: (hy / 16) * speed,
+                    alpha: 1.0,
+                    size: 2.2 + Math.random() * 2.5,
+                    color: i % 2 === 0 ? '#38bdf8' : '#ffffff'
+                });
+            }
+        }
+
+        function updateAndDrawFireworks(c) {
+            for (let i = fireworks.length - 1; i >= 0; i--) {
+                let f = fireworks[i];
+                f.x += f.vx;
+                f.y += f.vy;
+                f.alpha -= 0.022;
+
+                if (f.alpha <= 0) {
+                    fireworks.splice(i, 1);
+                    continue;
+                }
+
+                c.save();
+                c.globalAlpha = f.alpha;
+                c.fillStyle = f.color;
+                c.shadowColor = f.color;
+                c.shadowBlur = 6;
+                c.beginPath();
+                c.arc(f.x, f.y, f.size, 0, Math.PI * 2);
+                c.fill();
+                c.restore();
+            }
+        }
+
+        function resize() {
+            dpr = Math.min(window.devicePixelRatio || 1, 2);
+            width = window.innerWidth;
+            height = window.innerHeight;
+
+            canvas.width = Math.floor(width * dpr);
+            canvas.height = Math.floor(height * dpr);
+            canvas.style.width = width + 'px';
+            canvas.style.height = height + 'px';
+
+            ctx.setTransform(1, 0, 0, 1, 0, 0);
+            ctx.scale(dpr, dpr);
+
+            initSkyStars();
+            initRisingMotes();
+        }
+
+        function animate(timestamp) {
+            let elapsed = timestamp - startTime;
+            animProgress = Math.min(1.0, elapsed / ANIMATION_DURATION);
+
+            // NỀN VŨ TRỤ ĐÊM TƯƠNG PHẢN TÔN BÓ BÔNG XANH PASTEL
+            let bgGrad = ctx.createRadialGradient(width * 0.5, height * 0.45, 20, width * 0.5, height * 0.5, Math.max(width, height) * 0.9);
+            bgGrad.addColorStop(0, '#10152a');
+            bgGrad.addColorStop(0.38, '#0b0e1e');
+            bgGrad.addColorStop(0.75, '#060812');
+            bgGrad.addColorStop(1, '#030408');
+            ctx.fillStyle = bgGrad;
+            ctx.fillRect(0, 0, width, height);
+
+            let time = timestamp * 0.001;
+
+            updateAndDrawSky(ctx, time);
+
+            let isMobile = width < 650;
+            let cx = width * 0.5;
+            let cy = isMobile ? height * 0.485 : height * 0.495;
+
+            let scale;
+            if (isMobile) {
+                scale = Math.min(1.18, (width / 370) * 0.98);
+            } else {
+                scale = Math.min(1.42, (height / 680) * 0.98);
+            }
+
+            // ĐỐM SÁNG ĐOM ĐÓM BAY LÊN Ở NỀN SAU (KHÔNG CHE MẶT BÔNG)
+            if (animProgress > 0.25) {
+                updateAndDrawRisingMotes(ctx, cx, cy, scale, time);
+            }
+
+            drawCuteBackWrapper(ctx, cx, cy, scale, animProgress);
+            drawCuteLeaves(ctx, cx, cy, scale, animProgress);
+
+            // VẼ 7 ĐÓA HỒNG RÕ NÉT, TỪNG LỚP CÁNH RÕ RÀNG KHÔNG BỊ RỐI
+            for (let i = 0; i < KOREAN_ROSES.length; i++) {
+                let r = KOREAN_ROSES[i];
+                let rx = cx + r.relX * scale;
+                let ry = cy + r.relY * scale;
+                drawLushRose(ctx, rx, ry, r, animProgress);
+            }
+
+            // HOA BABY TRẮNG TUYẾT DỊU NHẸ, KHÔNG CHE LẤP CÁNH HOA
+            drawBabyBreathCloud(ctx, cx, cy, scale, animProgress, time);
+            drawCuteFrontWrapperAndRibbon(ctx, cx, cy, scale, animProgress, time);
+
+            updateAndDrawFireworks(ctx);
+
+            if (animProgress > 0.45 && !isFullyBloomed) {
+                isFullyBloomed = true;
+                document.getElementById('headerTitle').classList.add('show');
+                document.getElementById('bottomBanner').classList.add('show');
+            }
+
+            requestAnimationFrame(animate);
+        }
+
+        let audioCtx = null;
+        let isMusicPlaying = false;
+        let musicTimer = null;
+
+        const MUSIC_BOX_NOTES = [
+            { f: 523.25, d: 0.5 },
+            { f: 659.25, d: 0.5 },
+            { f: 783.99, d: 0.5 },
+            { f: 1046.50, d: 1.0 },
+            { f: 880.00, d: 0.5 },
+            { f: 783.99, d: 0.5 },
+            { f: 659.25, d: 0.5 },
+            { f: 587.33, d: 1.2 },
+            { f: 523.25, d: 0.5 },
+            { f: 587.33, d: 0.5 },
+            { f: 659.25, d: 1.4 },
+            { f: 523.25, d: 1.6 }
+        ];
+        let noteIdx = 0;
+
+        function playMusicBoxTone(freq, duration) {
+            if (!audioCtx) return;
+            let osc = audioCtx.createOscillator();
+            let gain = audioCtx.createGain();
+
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+
+            gain.gain.setValueAtTime(0.0001, audioCtx.currentTime);
+            gain.gain.linearRampToValueAtTime(0.2, audioCtx.currentTime + 0.03);
+            gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + duration);
+
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+
+            osc.start();
+            osc.stop(audioCtx.currentTime + duration);
+        }
+
+        function playMelodyLoop() {
+            if (!isMusicPlaying) return;
+            let current = MUSIC_BOX_NOTES[noteIdx];
+            playMusicBoxTone(current.f, current.d * 1.6);
+            noteIdx = (noteIdx + 1) % MUSIC_BOX_NOTES.length;
+            musicTimer = setTimeout(playMelodyLoop, current.d * 900);
+        }
+
+        function toggleMusic() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+
+            const btn = document.getElementById('btnMusic');
+            const icon = document.getElementById('musicIcon');
+            const text = document.getElementById('musicText');
+
+            if (isMusicPlaying) {
+                isMusicPlaying = false;
+                clearTimeout(musicTimer);
+                btn.classList.remove('playing');
+                icon.textContent = '🎵';
+                text.textContent = 'Bật Nhạc';
+            } else {
+                isMusicPlaying = true;
+                btn.classList.add('playing');
+                icon.textContent = '🎶';
+                text.textContent = 'Tắt Nhạc';
+                playMelodyLoop();
+            }
+        }
+
+        function replayBloom() {
+            startTime = performance.now();
+            animProgress = 0;
+            isFullyBloomed = false;
+            document.getElementById('headerTitle').classList.remove('show');
+            document.getElementById('bottomBanner').classList.remove('show');
+        }
+
+        window.addEventListener('resize', resize);
+
+        canvas.addEventListener('pointerdown', (e) => {
+            createHeartFirework(e.clientX, e.clientY);
+        });
+
+        document.getElementById('btnMusic').addEventListener('click', (e) => {
+            e.stopPropagation();
+            toggleMusic();
+        });
+
+        document.getElementById('btnReplay').addEventListener('click', (e) => {
+            e.stopPropagation();
+            replayBloom();
+        });
+
+        const modalLetter = document.getElementById('modalLetter');
+        document.getElementById('btnOpenLetter').addEventListener('click', (e) => {
+            e.stopPropagation();
+            modalLetter.classList.add('active');
+        });
+
+        document.getElementById('btnCloseLetter').addEventListener('click', () => {
+            modalLetter.classList.remove('active');
+        });
+
+        modalLetter.addEventListener('click', (e) => {
+            if (e.target === modalLetter) {
+                modalLetter.classList.remove('active');
+            }
+        });
+
+        initSprites();
+        initBabyFlowers();
+        initSkyStars();
+        initRisingMotes();
+        resize();
+        requestAnimationFrame(animate);
+    </script>
+</body>
+</html>
